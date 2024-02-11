@@ -1,11 +1,12 @@
 from phone_book import PhoneBook
-from validators import InputValidator
+from services import InputValidator, BookPaginator
 
 
 class Terminal:
     def __init__(self, book_name) -> None:
         self.conn = PhoneBook(book_name, 'data.json')
         self.validator = InputValidator()
+        self.paginator = BookPaginator()
 
     def greetings(self) -> None:
         print(f"Добро пожаловать в телефонный справочник {self.conn}")
@@ -24,9 +25,9 @@ class Terminal:
     def input_name(self) -> dict[str, str]:
         """Ввод ФИО для профиля с валидацией данных"""
         while True:
-            name = input("Введите имя (С заглавной буквы): ")
-            patronymic = input("Введите отчество (С заглавной буквы): ")
-            surname = input("Введите фамилию (С заглавной буквы): ")
+            name = input("Введите имя (с заглавной буквы): ")
+            patronymic = input("Введите отчество (с заглавной буквы): ")
+            surname = input("Введите фамилию (с заглавной буквы): ")
             if (self.validator.name_validation(name) and
                     self.validator.name_validation(patronymic) and
                     self.validator.name_validation(surname)):
@@ -39,7 +40,7 @@ class Terminal:
     def input_organization(self) -> dict[str, str]:
         """Ввод названия организации для профиля с валидацией данных"""
         while True:
-            organization = input("Введите название организации (С заглавной буквы): ")
+            organization = input("Введите название организации (с заглавной буквы): ")
             if self.validator.organization_validation(organization):
                 return {"organization": organization}
             print("Данные не корректны. Введите заново...")
@@ -55,12 +56,12 @@ class Terminal:
     def input_new_profile(self):
         """Ввод всех данных для профиля с валидацией данных"""
         while True:
-            name = input("Введите имя: ")
-            patronymic = input("Введите отчество: ")
-            surname = input("Введите фамилию: ")
-            organization = input("Введите организацию: ")
-            business_phone = input("Введите рабочий номер телефона: ")
-            private_phone = input("Введите домашний номер телефона: ")
+            name = input("Введите имя (с заглавной буквы): ")
+            patronymic = input("Введите отчество (с заглавной буквы): ")
+            surname = input("Введите фамилию (с заглавной буквы): ")
+            organization = input("Введите организацию (с заглавной буквы): ")
+            business_phone = input("Введите рабочий номер телефона (в формате +71234567890): ")
+            private_phone = input("Введите домашний номер телефона (в формате +71234567890): ")
             if (self.validator.name_validation(name) and
                     self.validator.name_validation(patronymic) and
                     self.validator.name_validation(surname) and
@@ -93,21 +94,63 @@ class Terminal:
                     break
                 case 1:
                     print("Получение всех данных справочника...")
-                    self.conn.show_all_profiles()
+                    data = self.conn.show_all_profiles()
+                    result = self.paginator.paginate_data(data)
+                    while True:
+                        mode = None
+                        try:
+                            mode = int(input("Введите 1 - для продолжения или 0 - для выхода: "))
+                        except ValueError:
+                            print("Ошибка ввода. Введите число (0-1)")
+                        match mode:
+                            case 0:
+                                print("Выход из меню получения данных справочника...")
+                                break
+                            case 1:
+                                try:
+                                    for i in next(result):
+                                        print(i)
+                                        print("********")
+                                except StopIteration:
+                                    print('Больше нет записей в справочнике')
+                                    break
+                            case _:
+                                print("Неизвестная команда. Введите число (0-1)")
                 case 2:
                     print("Получение данных справочника по ФИО...")
-                    data = self.input_name()
-                    self.conn.show_profile("name", name=data.get("name"),
-                                           patronymic=data.get("patronymic"),
-                                           surname=data.get("surname"))
+                    name = self.input_name()
+                    self.conn.show_profile("name", name=name.get("name"),
+                                           patronymic=name.get("patronymic"),
+                                           surname=name.get("surname"))
                 case 3:
                     print("Получение данных справочника по названию организации...")
-                    data = self.input_organization()
-                    self.conn.show_profile("organization", organization=data.get("organization"))
+                    organization = self.input_organization()
+                    data = self.conn.show_profile("organization", organization=organization.get("organization"))
+                    result = self.paginator.paginate_data(data)
+                    while True:
+                        mode = None
+                        try:
+                            mode = int(input("Введите 1 - для продолжения или 0 - для выхода: "))
+                        except ValueError:
+                            print("Ошибка ввода. Введите число (0-1)")
+                        match mode:
+                            case 0:
+                                print("Выход из меню получения данных справочника...")
+                                break
+                            case 1:
+                                try:
+                                    for i in next(result):
+                                        print(i)
+                                        print("********")
+                                except StopIteration:
+                                    print('Больше нет записей в справочнике')
+                                    break
+                            case _:
+                                print("Неизвестная команда. Введите число (0-1)")
                 case 4:
-                    print("Получение данных справочника по названию организации...")
-                    data = self.input_phone()
-                    self.conn.show_profile("phone", phone=data.get("phone"))
+                    print("Получение данных справочника по номеру телефона...")
+                    phone = self.input_phone()
+                    self.conn.show_profile("phone", phone=phone.get("phone"))
                 case 5:
                     print("Добавление профиля в справочник...")
                     data = self.input_new_profile()

@@ -5,10 +5,9 @@ class PhoneBook:
     """PhoneBook class with methods for adding and retrieving data
      containing user profiles"""
 
-    def __init__(self, name: str, db: str) -> None:
+    def __init__(self, name: str, db: str = "data.json") -> None:
         self.name = name
         self.db = db
-        self.id = 1
 
     def __str__(self):
         return f"телефонный справочник {self.name}"
