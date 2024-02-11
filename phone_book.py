@@ -98,33 +98,37 @@ class PhoneBook:
         print("Успешное удаление профиля")
         return "Успешное удаление профиля"
 
-    def show_all_profiles(self) -> None:
+    def show_all_profiles(self) -> list[str]:
         """Построчная печать всех профилей из справочника"""
+        result = list()
         for obj in self.get_all_profiles():
-            print(f"{obj.get("name")} {obj.get("patronymic")}"
-                  f" {obj.get("surname")}, "
-                  f"из организации {obj.get("organization")}."
-                  f" Рабочий телефон : {obj.get("phone").get("business")}, "
-                  f"персональный телефон : {obj.get("phone").get("private")}.")
+            result.append(f"{obj.get("name")} {obj.get("patronymic")}"
+                          f" {obj.get("surname")}, "
+                          f"из организации {obj.get("organization")}."
+                          f" Рабочий телефон : {obj.get("phone").get("business")}, "
+                          f"персональный телефон : {obj.get("phone").get("private")}.")
+        return result
 
-    def show_profile(self, mode: str, **kwargs) -> None | str:
+    def show_profile(self, mode: str, **kwargs) -> list[str] | str:
         """Печать определенных профилей из справочника"""
+        result = list()
         if mode == "name":
-            result = self.get_profile_by_name(**kwargs)
+            data = self.get_profile_by_name(**kwargs)
         elif mode == "organization":
-            result = self.get_profile_by_organization(**kwargs)
+            data = self.get_profile_by_organization(**kwargs)
         elif mode == "phone":
-            result = self.get_profile_by_phone(**kwargs)
+            data = self.get_profile_by_phone(**kwargs)
         else:
             return "Неправильно указан режим"
-        if not result:
-            print('Профиль не найден')
-        for obj in result:
-            print(f"{obj.get("name")} {obj.get("patronymic")}"
-                  f" {obj.get("surname")}, "
-                  f"из организации {obj.get("organization")}."
-                  f" Рабочий телефон : {obj.get("phone").get("business")}, "
-                  f"персональный телефон : {obj.get("phone").get("private")}.")
+        if not data:
+            return "Профиль не найден"
+        for obj in data:
+            result.append(f"{obj.get("name")} {obj.get("patronymic")}"
+                          f" {obj.get("surname")}, "
+                          f"из организации {obj.get("organization")}."
+                          f" Рабочий телефон : {obj.get("phone").get("business")}, "
+                          f"персональный телефон : {obj.get("phone").get("private")}.")
+        return result
 
     def check_duplicate(self, data: dict) -> bool:
         """Проверка справочника на ввод повторяющегося профиля"""
