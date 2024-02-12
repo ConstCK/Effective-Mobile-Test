@@ -1,8 +1,1 @@
-{"surname": "Ivanov", "name": "Ivan", "patronymic": "Ivanovich", "organization": "Beeline", "phone": {"business": "+711111111111", "private": "+79999999999"}}
-{"surname": "Maximov", "name": "Maxim", "patronymic": "Maximovich", "organization": "Tele2", "phone": {"business": "+70001112233", "private": "+79998887766"}}
-{"surname": "Jonson", "name": "Joe", "patronymic": "Petrovich", "organization": "MTC", "phone": {"business": "+71234567890", "private": "+79876543210"}}
-{"name": "Lox", "patronymic": "Petrovich", "surname": "Xep", "organization": "GazMyas", "phone": {"business": "+71112589173", "private": "+75558882291"}}
-{"name": "Oleg", "patronymic": "Igorevich", "surname": "Uzkiy", "organization": "MTC", "phone": {"business": "+89673213291", "private": "+75236845258"}}
-{"name": "Andrew", "patronymic": "Alexandrovich", "surname": "Bobr", "organization": "Beeline", "phone": {"business": "+22222222354", "private": "+55556664488"}}
-{"name": "Oleg", "patronymic": "Konstantinovich", "surname": "Volkov", "organization": "MTC", "phone": {"business": "+84443331199", "private": "+45559876234"}}
-{"name": "Alex", "patronymic": "Olegovich", "surname": "Gnom", "organization": "megafon", "phone": {"business": "+88886666666", "private": "+24569873152"}}
+{"name": "Ivan", "patronymic": "Ivanovich", "surname": "Ivanov", "organization": "Tele2", "phone": {"business": "+11111111111", "private": "+22222222222"}}

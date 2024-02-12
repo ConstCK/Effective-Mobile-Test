@@ -1,3 +1,4 @@
+import json
 import jsonlines
 
 
@@ -14,7 +15,8 @@ class PhoneBook:
 
     def add_profile(self, data: dict) -> str:
         """Добавление профиля в справочник"""
-        if self.check_name_duplicate(data):
+        all_data: list[dict[str, str | dict[str, str]]] = self.get_all_profiles()
+        if self.check_name_duplicate(data, all_data):
             return "Профиль уже существует"
         with jsonlines.open(self.db, mode='a') as file:
             file.write(data)
@@ -23,7 +25,10 @@ class PhoneBook:
     def get_all_profiles(self) -> list:
         """Получение всех профилей из справочника"""
         with jsonlines.open(self.db, mode='r') as file:
-            result: list[dict[str, str | dict[str, str]]] = [item for item in file]
+            try:
+                result: list[dict[str, str | dict[str, str]]] = [item for item in file]
+            except jsonlines.jsonlines.InvalidLineError:
+                return []
             return result
 
     def get_profile_by_name(self, **kwargs: str) -> list[dict[str, str | dict[str, str]]] | str:
@@ -38,7 +43,7 @@ class PhoneBook:
 
     def get_profile_by_organization(self, **kwargs: str) -> list[dict[str, str | dict[str, str]]]:
         """Получение профиля из справочника с указанием организации"""
-        all_data = self.get_all_profiles()
+        all_data: list[dict[str, str | dict[str, str]]] = self.get_all_profiles()
         result = filter(lambda obj:
                         obj.get("organization") == kwargs.get("organization"),
                         all_data)
@@ -66,7 +71,7 @@ class PhoneBook:
         except IndexError:
             return "Профиль не найден"
         all_data.remove(garbage_profile)
-        if self.check_name_duplicate(new_data):
+        if self.check_name_duplicate(new_data, all_data):
             return "Профиль уже существует"
         all_data.append(new_data)
         with jsonlines.open(self.db, mode='w') as file:
@@ -124,13 +129,13 @@ class PhoneBook:
                           f"персональный телефон : {obj.get("phone").get("private")}.")
         return result
 
-    def check_name_duplicate(self, data: dict) -> bool:
+    def check_name_duplicate(self, data: dict, all_data: list) -> bool:
         """Проверка справочника на ввод повторяющегося профиля
         Примечание: В данном справочнике исключены профили с одинаковыми ФИО"""
-        all_data: list[dict[str, str | dict[str, str]]] = self.get_all_profiles()
-        for item in all_data:
-            if (item.get("name") == data.get("name") and
-                    item.get("patronymic") == data.get("patronymic") and
-                    item.get("surname") == data.get("surname")):
-                return True
+        if all_data:
+            for item in all_data:
+                if (item.get("name") == data.get("name") and
+                        item.get("patronymic") == data.get("patronymic") and
+                        item.get("surname") == data.get("surname")):
+                    return True
         return False

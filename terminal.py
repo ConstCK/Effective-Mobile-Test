@@ -5,8 +5,8 @@ from services import InputValidator, BookPaginator
 
 
 class Terminal:
-    def __init__(self, book_name: str) -> None:
-        self.conn = PhoneBook(book_name, 'data.json')
+    def __init__(self, book_name: str, db: str) -> None:
+        self.conn = PhoneBook(book_name, db)
         self.validator = InputValidator()
         self.paginator = BookPaginator()
 
