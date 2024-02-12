@@ -9,11 +9,13 @@ my_test = PhoneBook('my test book', 'test.json')
 
 @pytest.fixture(scope="function")
 def initial_run():
+    """Стартовый запуск с очисткой БД"""
     with jsonlines.open("test.json", mode='w'):
         pass
 
 
 def test_get_initial_data(initial_run):
+    """Тест Получения данных из пустой БД"""
     assert my_test.show_all_profiles() == []
 
 
@@ -23,6 +25,7 @@ def test_get_initial_data(initial_run):
                                             (p1, "Профиль уже существует")
                                             ])
 def test_create_profile(data, expected):
+    """Тест создания профилей в БД"""
     assert my_test.add_profile(data) == expected
 
 
@@ -55,10 +58,12 @@ def test_create_profile(data, expected):
                                                         ("phone", p9, ""),
                                                         ])
 def test_get_profile(mode, input_data, expected):
+    """Тест получения определенных профилей из БД"""
     assert my_test.show_profile(mode, **input_data) == expected
 
 
 def test_get_all_data():
+    """Тест получения всех профилей из БД"""
     assert my_test.show_all_profiles() == [f"{p1.get("name")} {p1.get("patronymic")}"
                                            f" {p1.get("surname")}, "
                                            f"из организации {p1.get("organization")}."
@@ -83,6 +88,7 @@ def test_get_all_data():
 
                                                           ])
 def test_update_profile(new_data, old_data, expected):
+    """Тест изменения определенных профилей в БД"""
     assert my_test.update_profile(new_data, **old_data) == expected
 
 
@@ -90,4 +96,5 @@ def test_update_profile(new_data, old_data, expected):
                                                   (p7, "Профиль не найден"),
                                                   ])
 def test_delete_profile(input_data, expected):
+    """Тест удаления определенных профилей в БД"""
     assert my_test.delete_profile(**input_data) == expected
