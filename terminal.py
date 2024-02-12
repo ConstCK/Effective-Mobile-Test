@@ -1,9 +1,11 @@
+from typing import Generator
+
 from phone_book import PhoneBook
 from services import InputValidator, BookPaginator
 
 
 class Terminal:
-    def __init__(self, book_name) -> None:
+    def __init__(self, book_name: str) -> None:
         self.conn = PhoneBook(book_name, 'data.json')
         self.validator = InputValidator()
         self.paginator = BookPaginator()
@@ -25,9 +27,9 @@ class Terminal:
     def input_name(self) -> dict[str, str]:
         """Ввод ФИО для профиля с валидацией данных"""
         while True:
-            name = input("Введите имя (с заглавной буквы): ")
-            patronymic = input("Введите отчество (с заглавной буквы): ")
-            surname = input("Введите фамилию (с заглавной буквы): ")
+            name: str = input("Введите имя (с заглавной буквы): ")
+            patronymic: str = input("Введите отчество (с заглавной буквы): ")
+            surname: str = input("Введите фамилию (с заглавной буквы): ")
             if (self.validator.name_validation(name) and
                     self.validator.name_validation(patronymic) and
                     self.validator.name_validation(surname)):
@@ -40,7 +42,7 @@ class Terminal:
     def input_organization(self) -> dict[str, str]:
         """Ввод названия организации для профиля с валидацией данных"""
         while True:
-            organization = input("Введите название организации (с заглавной буквы): ")
+            organization: str = input("Введите название организации: ")
             if self.validator.organization_validation(organization):
                 return {"organization": organization}
             print("Данные не корректны. Введите заново...")
@@ -48,20 +50,20 @@ class Terminal:
     def input_phone(self) -> dict[str, str]:
         """Ввод номера телефона для профиля с валидацией данных"""
         while True:
-            phone = input("Введите номер телефона (в формате +71234567890): ")
+            phone: str = input("Введите номер телефона (в формате +71234567890): ")
             if self.validator.phone_validation(phone):
                 return {"phone": phone}
             print("Данные не корректны. Введите заново...")
 
-    def input_new_profile(self):
+    def input_new_profile(self) -> dict[str, str | dict[str, str]]:
         """Ввод всех данных для профиля с валидацией данных"""
         while True:
-            name = input("Введите имя (с заглавной буквы): ")
-            patronymic = input("Введите отчество (с заглавной буквы): ")
-            surname = input("Введите фамилию (с заглавной буквы): ")
-            organization = input("Введите организацию (с заглавной буквы): ")
-            business_phone = input("Введите рабочий номер телефона (в формате +71234567890): ")
-            private_phone = input("Введите домашний номер телефона (в формате +71234567890): ")
+            name: str = input("Введите имя (с заглавной буквы): ")
+            patronymic: str = input("Введите отчество (с заглавной буквы): ")
+            surname: str = input("Введите фамилию (с заглавной буквы): ")
+            organization: str = input("Введите организацию: ")
+            business_phone: str = input("Введите рабочий номер телефона (в формате +71234567890): ")
+            private_phone: str = input("Введите домашний номер телефона (в формате +71234567890): ")
             if (self.validator.name_validation(name) and
                     self.validator.name_validation(patronymic) and
                     self.validator.name_validation(surname) and
@@ -79,9 +81,9 @@ class Terminal:
                         }
             print("Данные не корректны. Введите заново...")
 
-    def run_program(self):
+    def run_program(self) -> str:
         """Ввод команд меню для управления справочником"""
-        choice = None
+        choice: int | None = None
         while choice != 0:
             self.show_menu()
             try:
@@ -94,10 +96,10 @@ class Terminal:
                     break
                 case 1:
                     print("Получение всех данных справочника...")
-                    data = self.conn.show_all_profiles()
-                    result = self.paginator.paginate_data(data)
+                    data: list[str] = self.conn.show_all_profiles()
+                    result: Generator = self.paginator.paginate_data(data)
                     while True:
-                        mode = None
+                        mode: int | None = None
                         try:
                             mode = int(input("Введите 1 - для продолжения или 0 - для выхода: "))
                         except ValueError:
@@ -118,17 +120,18 @@ class Terminal:
                                 print("Неизвестная команда. Введите число (0-1)")
                 case 2:
                     print("Получение данных справочника по ФИО...")
-                    name = self.input_name()
-                    self.conn.show_profile("name", name=name.get("name"),
-                                           patronymic=name.get("patronymic"),
-                                           surname=name.get("surname"))
+                    name: dict[str, str] = self.input_name()
+                    print(self.conn.show_profile("name", name=name.get("name"),
+                                                 patronymic=name.get("patronymic"),
+                                                 surname=name.get("surname")))
                 case 3:
                     print("Получение данных справочника по названию организации...")
                     organization = self.input_organization()
-                    data = self.conn.show_profile("organization", organization=organization.get("organization"))
+                    data: list[str] | str = self.conn.show_profile("organization", organization=organization.get(
+                        "organization"))
                     result = self.paginator.paginate_data(data)
                     while True:
-                        mode = None
+                        mode: int | None = None
                         try:
                             mode = int(input("Введите 1 - для продолжения или 0 - для выхода: "))
                         except ValueError:
@@ -149,32 +152,32 @@ class Terminal:
                                 print("Неизвестная команда. Введите число (0-1)")
                 case 4:
                     print("Получение данных справочника по номеру телефона...")
-                    phone = self.input_phone()
-                    self.conn.show_profile("phone", phone=phone.get("phone"))
+                    phone: dict[str, str] = self.input_phone()
+                    print(self.conn.show_profile("phone", phone=phone.get("phone")))
                 case 5:
                     print("Добавление профиля в справочник...")
-                    data = self.input_new_profile()
-                    self.conn.add_profile(data)
+                    data: dict[str, str | dict[str, str]] = self.input_new_profile()
+                    print(self.conn.add_profile(data))
                 case 6:
                     print("Изменение профиля в справочнике...")
                     print("Ввод данных профиля для изменения...")
                     old_profile = self.input_name()
                     print("Ввод новых данных профиля...")
                     new_profile = self.input_new_profile()
-                    self.conn.update_profile(new_profile,
-                                             name=old_profile.get("name"),
-                                             patronymic=old_profile.get("patronymic"),
-                                             surname=old_profile.get("surname")
-                                             )
+                    print(self.conn.update_profile(new_profile,
+                                                   name=old_profile.get("name"),
+                                                   patronymic=old_profile.get("patronymic"),
+                                                   surname=old_profile.get("surname")
+                                                   ))
                 case 7:
                     print("Удаление профиля в справочнике...")
                     print("Ввод данных профиля для удаления...")
-                    data = self.input_name()
-                    self.conn.delete_profile(
+                    data: dict[str, str] = self.input_name()
+                    print(self.conn.delete_profile(
                         name=data.get("name"),
                         patronymic=data.get("patronymic"),
                         surname=data.get("surname")
-                    )
+                    ))
                 case _:
                     print("Неизвестная команда. Введите число (1-7)")
 

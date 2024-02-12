@@ -29,8 +29,28 @@ p3 = {"surname": "Maximov",
       }
 
 p4 = {"surname": "Kozlov",
-      "name": "Akop",
+      "name": "Oleg",
       "patronymic": "Sergeevich",
+      "organization": "Tele2",
+      "phone": {
+          "business": "+70001112200",
+          "private": "+79998887700",
+      }
+      }
+
+p5 = {"surname": "Kozlov",
+      "name": "Oleg",
+      "patronymic": "Sergeevich",
+      "organization": "MTC",
+      "phone": {
+          "business": "+70001112201",
+          "private": "+79998887701",
+      }
+      }
+
+p6 = {"surname": "Kozlov",
+      "name": "Oleg",
+      "patronymic": "Igorevich",
       "organization": "Tele2",
       "phone": {
           "business": "+70001112200",

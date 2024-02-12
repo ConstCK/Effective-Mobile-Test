@@ -2,7 +2,7 @@
 {"surname": "Maximov", "name": "Maxim", "patronymic": "Maximovich", "organization": "Tele2", "phone": {"business": "+70001112233", "private": "+79998887766"}}
 {"surname": "Jonson", "name": "Joe", "patronymic": "Petrovich", "organization": "MTC", "phone": {"business": "+71234567890", "private": "+79876543210"}}
 {"name": "Lox", "patronymic": "Petrovich", "surname": "Xep", "organization": "GazMyas", "phone": {"business": "+71112589173", "private": "+75558882291"}}
-{"name": "Orel", "patronymic": "Egorovich", "surname": "Orlov", "organization": "MTC", "phone": {"business": "+11111112233", "private": "+95557778899"}}
-{"name": "11", "patronymic": "22", "surname": "33", "organization": "Beeline", "phone": {"business": "+5", "private": "+6"}}
-{"name": "Fuch", "patronymic": "Fucher", "surname": "Fuchir", "organization": "Tele2", "phone": {"business": "+85623231589", "private": "+91597538565"}}
 {"name": "Oleg", "patronymic": "Igorevich", "surname": "Uzkiy", "organization": "MTC", "phone": {"business": "+89673213291", "private": "+75236845258"}}
+{"name": "Andrew", "patronymic": "Alexandrovich", "surname": "Bobr", "organization": "Beeline", "phone": {"business": "+22222222354", "private": "+55556664488"}}
+{"name": "Oleg", "patronymic": "Konstantinovich", "surname": "Volkov", "organization": "MTC", "phone": {"business": "+84443331199", "private": "+45559876234"}}
+{"name": "Alex", "patronymic": "Olegovich", "surname": "Gnom", "organization": "megafon", "phone": {"business": "+88886666666", "private": "+24569873152"}}

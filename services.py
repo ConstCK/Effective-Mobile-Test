@@ -1,3 +1,6 @@
+from typing import Generator
+
+
 class InputValidator:
     def __init__(self) -> None:
         pass
@@ -24,7 +27,7 @@ class BookPaginator:
         pass
 
     @staticmethod
-    def paginate_data(data: list[str], size: int = 2):
+    def paginate_data(data: list[str], size: int = 2) -> Generator:
         start: int = 0
         while start < len(data):
             yield data[start:size + start]
